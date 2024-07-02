@@ -1,0 +1,31 @@
+#!/usr/bin/env zsh
+
+## This script relies on already having install_dotfiles installed--it is not included in this script
+
+# Install curl and bash (if not already installed)
+sudo apt-get update && sudo apt-get install -y curl bash
+
+# Set environment variables
+export RYE_INSTALL_OPTION="--yes"
+
+# Install Rye
+curl -sSf https://rye.astral.sh/get | bash
+
+# Add shims folder to PATH
+export PATH=$PATH:$HOME/.rye/shims
+echo 'source "$HOME/.rye/env"' >> ~/.zshrc
+echo 'source "$HOME/.rye/env"' >> ~/.bashrc
+
+# Install Rye completions to zsh as a plugin to oh-my-zsh
+sudo mkdir -p $ZSH_CUSTOM/plugins/rye
+sudo touch $ZSH_CUSTOM/plugins/rye/_rye
+rye self completion -s zsh > $ZSH_CUSTOM/plugins/rye/_rye
+
+# Install Rye completions to bash
+mkdir -p ~/.local/share/bash-completion/completions
+rye self completion > ~/.local/share/bash-completion/completions/rye.bash
+
+# Install rye config file
+install_dotfiles "$HOME/.rye" rye-config.toml
+[ -f "$HOME/.rye/config.toml" ] && rm "$HOME/.rye/config.toml" # Remove existing config file
+mv "$HOME/.rye/rye-config.toml" "$HOME/.rye/config.toml" # Rename the config file

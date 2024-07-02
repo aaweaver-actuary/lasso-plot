@@ -1,0 +1,22 @@
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: fastapi.Dockerfile
+    environment:
+      - FAST_API_DEV_MODE=1
+    ports:
+      - '8000:8000'
+    volumes:
+      - ../:/app
+
+  nextjs:
+    build:
+      context: .
+      dockerfile: nextjs.Dockerfile
+    environment:
+      - NEXTJS_DEV_MODE=1
+    ports:
+      - '3000:3000'
+    volumes:
+      - ../lasso-app:/app
