@@ -49,6 +49,8 @@ beautifulsoup4==4.12.3
     # via nbconvert
 bleach==6.1.0
     # via nbconvert
+blinker==1.8.2
+    # via flask
 cachetools==5.3.3
     # via pygwalker
 catboost==1.2.2
@@ -69,6 +71,7 @@ chardet==5.2.0
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
+    # via flask
     # via predictables
     # via typer
     # via uvicorn
@@ -85,6 +88,14 @@ coverage==7.4.4
 cycler==0.12.1
     # via matplotlib
     # via predictables
+dash==2.17.1
+    # via lasso-plot
+dash-core-components==2.0.0
+    # via dash
+dash-html-components==2.0.0
+    # via dash
+dash-table==5.0.0
+    # via dash
 dateutils==0.6.12
     # via kanaries-track
 debugpy==1.8.1
@@ -120,6 +131,8 @@ fastjsonschema==2.20.0
 flake8==7.0.0
     # via predictables
     # via pytest-flake8
+flask==3.0.3
+    # via dash
 fonttools==4.44.0
     # via matplotlib
     # via predictables
@@ -151,6 +164,7 @@ idna==3.4
     # via predictables
     # via requests
 importlib-metadata==6.8.0
+    # via dash
     # via predictables
 iniconfig==2.0.0
     # via predictables
@@ -176,11 +190,14 @@ isoduration==20.11.0
     # via jsonschema
 isort==5.13.2
     # via predictables
+itsdangerous==2.2.0
+    # via flask
 jedi==0.19.1
     # via ipython
     # via predictables
 jinja2==3.1.4
     # via fastapi
+    # via flask
     # via jupyter-server
     # via jupyterlab
     # via jupyterlab-server
@@ -261,6 +278,7 @@ markdown-it-py==3.0.0
 markupsafe==2.1.5
     # via jinja2
     # via nbconvert
+    # via werkzeug
 matplotlib==3.8.1
     # via catboost
     # via lasso-plot
@@ -293,6 +311,7 @@ nbformat==5.10.4
     # via nbclient
     # via nbconvert
 nest-asyncio==1.6.0
+    # via dash
     # via ipykernel
     # via predictables
 notebook==7.2.1
@@ -366,6 +385,7 @@ platformdirs==4.2.0
     # via predictables
 plotly==5.18.0
     # via catboost
+    # via dash
     # via lasso-plot
     # via predictables
 pluggy==1.4.0
@@ -483,10 +503,13 @@ referencing==0.35.1
 reportlab==4.0.9
     # via predictables
 requests==2.32.3
+    # via dash
     # via jupyterlab-server
     # via kanaries-track
     # via pygwalker
     # via segment-analytics-python
+retrying==1.3.4
+    # via dash
 rfc3339-validator==0.1.4
     # via jsonschema
     # via jupyter-events
@@ -516,6 +539,7 @@ segment-analytics-python==2.2.3
 send2trash==1.8.3
     # via jupyter-server
 setuptools==70.2.0
+    # via dash
     # via jupyterlab
 shellingham==1.5.4
     # via typer
@@ -526,6 +550,7 @@ six==1.16.0
     # via patsy
     # via predictables
     # via python-dateutil
+    # via retrying
     # via rfc3339-validator
 sniffio==1.3.1
     # via anyio
@@ -615,6 +640,7 @@ types-six==1.16.21.20240311
 types-tqdm==4.66.0.20240106
     # via predictables
 typing-extensions==4.10.0
+    # via dash
     # via fastapi
     # via mypy
     # via predictables
@@ -653,6 +679,9 @@ websocket-client==1.8.0
     # via jupyter-server
 websockets==12.0
     # via uvicorn
+werkzeug==3.0.3
+    # via dash
+    # via flask
 wheel==0.43.0
     # via predictables
 widgetsnbextension==4.0.10
