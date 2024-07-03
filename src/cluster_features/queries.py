@@ -1,7 +1,7 @@
 """Define sql queries to calculate similarity metrics between two columns in a table, and store the results in a new table."""
 
 
-def cts_cts_query(col1: str, col2: str) -> str:
+def cts_cts_query(col1: str, col2: str, table_name: str = "X_num") -> str:
     """Create a SQL query to calculate similarity metrics between two columns in a table.
 
     This function generates a SQL query that calculates the following similarity metrics between two columns in a table:
@@ -21,13 +21,15 @@ def cts_cts_query(col1: str, col2: str) -> str:
         The SQL query to calculate the similarity metrics. This should be
         passed to the duckdb.write() method to execute the query.
     """
+    col1 = col1.replace("[", "__").replace("]", "")
+    col2 = col2.replace("[", "__").replace("]", "")
     return f"""
         create schema if not exists cts_cts;
-        create or replace table cts_cts.{col1}__{col2} as (
+        create or replace view cts_cts.{col1}__{col2} as (
             with
 
             c1c2 as (
-                select {col1}, {col2} from cluster.X
+                select {col1}, {col2} from cluster.{table_name}
             ),
 
             std as (
@@ -107,14 +109,28 @@ def cts_cts_query(col1: str, col2: str) -> str:
                     end as jaccard_similarity
 
                 from add_intersection_and_union
+            ),
+            
+            final as (
+                select distinct
+                    '{col1}' as col1,
+                    '{col2}' as col2,
+                    euclidean_distance,
+                    manhattan_distance,
+                    dot_product,
+                    cosine_similarity,
+                    pearson_correlation,
+                    jaccard_similarity
+                    
+                from jaccard_similarity
             )
 
-            from jaccard_similarity
+            from final
         );
         """  # noqa: S608
 
 
-def binary_binary_query(col1: str, col2: str) -> str:
+def binary_binary_query(col1: str, col2: str, table_name: str = "X_num") -> str:
     """Create a SQL query to calculate similarity metrics between two columns in a table.
 
     This function generates a SQL query that calculates the following similarity metrics between two columns in a table:
@@ -134,11 +150,11 @@ def binary_binary_query(col1: str, col2: str) -> str:
     """
     return f"""
         create schema if not exists bin_bin;
-        create or replace table bin_bin.{col1}__{col2} as (
+        create or replace view bin_bin.{col1}__{col2} as (
             with
 
             c1c2 as (
-                select {col1}, {col2} from cluster.X
+                select {col1}, {col2} from cluster.{table_name}
             ),
 
             add_intersection_and_union as (
@@ -175,7 +191,7 @@ def binary_binary_query(col1: str, col2: str) -> str:
         """  # noqa: S608
 
 
-def binary_categorical_query(col1: str, col2: str) -> str:
+def binary_categorical_query(col1: str, col2: str, table_name: str = "X_num") -> str:
     """Create a SQL query to calculate similarity metrics between two columns in a table.
 
     This function generates a SQL query that calculates the following similarity metrics between two columns in a table:
@@ -195,11 +211,11 @@ def binary_categorical_query(col1: str, col2: str) -> str:
     """
     return f"""
         create schema if not exists bin_cat;
-        create or replace table bin_cat.{col1}__{col2} as (
+        create or replace view bin_cat.{col1}__{col2} as (
             with
 
             c1c2 as (
-                select {col1}, {col2} from cluster.X
+                select {col1}, {col2} from cluster.{table_name}
             ),
 
             add_intersection_and_union as (
@@ -226,7 +242,7 @@ def binary_categorical_query(col1: str, col2: str) -> str:
                 select
                     {col1},
                     count(*) as count_col1
-                from cluster.X
+                from cluster.{table_name}
                 group by {col1}
             ),
 
@@ -234,7 +250,7 @@ def binary_categorical_query(col1: str, col2: str) -> str:
                 select
                     {col2},
                     count(*) as count_col2
-                from cluster.X
+                from cluster.{table_name}
                 group by {col2}
             ),
 
@@ -243,7 +259,7 @@ def binary_categorical_query(col1: str, col2: str) -> str:
                     {col1},
                     {col2},
                     count(*) as count_col1_col2
-                from cluster.X
+                from cluster.{table_name}
                 group by {col1}, {col2}
             ),
 
