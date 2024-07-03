@@ -3,7 +3,7 @@
 from __future__ import annotations
 from sklearn.linear_model import LogisticRegressionCV
 from dataclasses import dataclass
-from tying import List
+from typing import List
 
 import pandas as pd
 import numpy as np
