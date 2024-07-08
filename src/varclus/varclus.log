@@ -1,0 +1,157 @@
+2024-07-08 15:29:38,722 - varclus - DEBUG - Initialized VarClus class.
+2024-07-08 15:29:38,745 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:31:27,081 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:31:39,108 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:32:24,145 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:32:24,145 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:32:32,650 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:32:32,651 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:33:08,152 - varclus - DEBUG - Entering VarClus.initialize_clusters method.
+2024-07-08 15:33:08,156 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:33:08,158 - varclus - DEBUG - Computing the distance matrix.
+2024-07-08 15:33:08,159 - varclus - DEBUG - Entering ClusterInitializer.perform_hierarchical_clustering method.
+2024-07-08 15:33:08,161 - varclus - DEBUG - Entering ClusterInitializer.get_clusters method.
+2024-07-08 15:34:06,026 - varclus - DEBUG - Initialized VarClus class.
+2024-07-08 15:34:06,052 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:34:06,069 - varclus - DEBUG - Entering VarClus.initialize_clusters method.
+2024-07-08 15:34:06,071 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:34:06,073 - varclus - DEBUG - Computing the distance matrix.
+2024-07-08 15:34:06,074 - varclus - DEBUG - Distance matrix:
+
+[[ 0.00000000e+00 -4.44089210e-16  9.91172665e-01]
+ [-4.44089210e-16  0.00000000e+00  9.91172665e-01]
+ [ 9.91172665e-01  9.91172665e-01  0.00000000e+00]]
+2024-07-08 15:34:06,076 - varclus - DEBUG - Entering ClusterInitializer.perform_hierarchical_clustering method.
+2024-07-08 15:34:06,077 - varclus - DEBUG - Entering ClusterInitializer.get_clusters method.
+2024-07-08 15:34:52,723 - varclus - DEBUG - Initialized VarClus class.
+2024-07-08 15:34:52,758 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:34:52,781 - varclus - DEBUG - Entering VarClus.initialize_clusters method.
+2024-07-08 15:34:52,783 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:34:52,784 - varclus - DEBUG - Computing the distance matrix.
+2024-07-08 15:34:52,785 - varclus - DEBUG - Distance matrix:
+
+[[ 0.         -0.          0.99117267]
+ [-0.          0.          0.99117267]
+ [ 0.99117267  0.99117267  0.        ]]
+2024-07-08 15:34:52,788 - varclus - DEBUG - Entering ClusterInitializer.perform_hierarchical_clustering method.
+2024-07-08 15:34:52,788 - varclus - DEBUG - Entering ClusterInitializer.get_clusters method.
+2024-07-08 15:34:52,789 - varclus - DEBUG - Completed VarClus.initialize_clusters method.
+2024-07-08 15:34:52,808 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:34:52,809 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:35:03,247 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:35:03,249 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:35:21,208 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:35:21,208 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:35:42,253 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:35:42,255 - varclus - DEBUG - Computing the distance matrix.
+2024-07-08 15:36:24,370 - varclus - DEBUG - Initialized VarClus class.
+2024-07-08 15:36:24,394 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:36:24,413 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:36:24,415 - varclus - DEBUG - Computing the distance matrix.
+2024-07-08 15:36:24,441 - varclus - DEBUG - Entering VarClus.initialize_clusters method.
+2024-07-08 15:36:24,443 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:36:24,445 - varclus - DEBUG - Computing the distance matrix.
+2024-07-08 15:36:24,445 - varclus - DEBUG - Distance matrix:
+
+[[ 0.         -0.          0.99117267]
+ [-0.          0.          0.99117267]
+ [ 0.99117267  0.99117267  0.        ]]
+2024-07-08 15:36:24,448 - varclus - DEBUG - Entering ClusterInitializer.perform_hierarchical_clustering method.
+2024-07-08 15:36:24,449 - varclus - DEBUG - Entering ClusterInitializer.get_clusters method.
+2024-07-08 15:36:24,449 - varclus - DEBUG - Completed VarClus.initialize_clusters method.
+2024-07-08 15:36:24,471 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:36:24,471 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:36:41,470 - varclus - DEBUG - Entering VarClus.run method.
+2024-07-08 15:36:41,471 - varclus - DEBUG - Beggining loop in VarClus.run method.
+2024-07-08 15:36:41,471 - varclus - DEBUG - Entering VarClus._one_iteration method.
+2024-07-08 15:36:41,472 - varclus - DEBUG - Beggining loop in VarClus._one_iteration method.
+2024-07-08 15:36:41,475 - varclus - DEBUG - Entering ClusterMergerSplitter.should_two_clusters_merge method.
+2024-07-08 15:36:41,475 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:36:41,475 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:36:41,476 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:36:41,476 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:36:41,481 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:36:41,484 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:36:41,489 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:36:41,489 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:36:41,492 - varclus - DEBUG - Completed ClusterMergerSplitter.should_two_clusters_merge method.
+2024-07-08 15:36:41,492 - varclus - DEBUG - Completed loop in VarClus._one_iteration method.
+2024-07-08 15:36:41,492 - varclus - DEBUG - Beggining loop in VarClus._one_iteration method.
+2024-07-08 15:36:41,492 - varclus - DEBUG - Entering ClusterMergerSplitter.split_cluster method.
+2024-07-08 15:36:41,492 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:36:41,501 - varclus - DEBUG - Beggining loop in ClusterMergerSplitter.split_cluster method.
+2024-07-08 15:36:41,503 - varclus - DEBUG - Completed ClusterMergerSplitter.split_cluster method.
+2024-07-08 15:36:41,503 - varclus - DEBUG - Entering ClusterMergerSplitter.split_cluster method.
+2024-07-08 15:36:41,503 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:36:41,504 - varclus - DEBUG - Completed loop in VarClus._one_iteration method.
+2024-07-08 15:36:41,504 - varclus - DEBUG - Completed VarClus._one_iteration method.
+2024-07-08 15:36:41,504 - varclus - DEBUG - Completed loop in VarClus.run method. Assigning final clusters.
+2024-07-08 15:36:41,504 - varclus - DEBUG - Entering VarClus.get_clusters method.
+2024-07-08 15:36:41,504 - varclus - DEBUG - Completed VarClus.get_clusters method.
+2024-07-08 15:36:41,506 - varclus - DEBUG - Completed VarClus.run method.
+2024-07-08 15:38:37,591 - varclus - DEBUG - Initialized VarClus class.
+2024-07-08 15:38:39,184 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:38:42,062 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:38:42,066 - varclus - DEBUG - Computing the distance matrix.
+2024-07-08 15:38:43,939 - varclus - DEBUG - Entering VarClus.initialize_clusters method.
+2024-07-08 15:38:43,942 - varclus - DEBUG - Computing the correlation matrix.
+2024-07-08 15:38:43,944 - varclus - DEBUG - Computing the distance matrix.
+2024-07-08 15:38:43,944 - varclus - DEBUG - Distance matrix:
+
+[[0.00000000e+00 9.79803236e-01 9.66884305e-01 9.78513767e-01]
+ [9.79803236e-01 0.00000000e+00 9.95738167e-01 8.32000000e-07]
+ [9.66884305e-01 9.95738167e-01 0.00000000e+00 9.95695562e-01]
+ [9.78513767e-01 8.32000000e-07 9.95695562e-01 0.00000000e+00]]
+2024-07-08 15:38:43,946 - varclus - DEBUG - Entering ClusterInitializer.perform_hierarchical_clustering method.
+2024-07-08 15:38:43,947 - varclus - DEBUG - Entering ClusterInitializer.get_clusters method.
+2024-07-08 15:38:43,947 - varclus - DEBUG - Completed VarClus.initialize_clusters method.
+2024-07-08 15:38:48,389 - varclus - DEBUG - Entering VarClus.run method.
+2024-07-08 15:38:48,389 - varclus - DEBUG - Beggining loop in VarClus.run method.
+2024-07-08 15:38:48,389 - varclus - DEBUG - Entering VarClus._one_iteration method.
+2024-07-08 15:38:48,389 - varclus - DEBUG - Beggining loop in VarClus._one_iteration method.
+2024-07-08 15:38:48,390 - varclus - DEBUG - Entering ClusterMergerSplitter.should_two_clusters_merge method.
+2024-07-08 15:38:48,391 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:38:48,391 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:38:48,391 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:38:48,391 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:38:48,400 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:38:48,401 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:38:48,405 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:38:48,405 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:38:48,409 - varclus - DEBUG - Completed ClusterMergerSplitter.should_two_clusters_merge method.
+2024-07-08 15:38:48,409 - varclus - DEBUG - Entering ClusterMergerSplitter.should_two_clusters_merge method.
+2024-07-08 15:38:48,409 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:38:48,409 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:38:48,409 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:38:48,409 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:38:48,412 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:38:48,414 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:38:48,416 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:38:48,416 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:38:48,422 - varclus - DEBUG - Completed ClusterMergerSplitter.should_two_clusters_merge method.
+2024-07-08 15:38:48,422 - varclus - DEBUG - Entering ClusterMergerSplitter.should_two_clusters_merge method.
+2024-07-08 15:38:48,422 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:38:48,422 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:38:48,423 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:38:48,423 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:38:48,427 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:38:48,427 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:38:48,430 - varclus - DEBUG - Entering PCAHandler.get_pca_variance method.
+2024-07-08 15:38:48,430 - varclus - DEBUG - Entering PCAHandler.get_most_important_component method.
+2024-07-08 15:38:48,433 - varclus - DEBUG - Completed ClusterMergerSplitter.should_two_clusters_merge method.
+2024-07-08 15:38:48,433 - varclus - DEBUG - Completed loop in VarClus._one_iteration method.
+2024-07-08 15:38:48,433 - varclus - DEBUG - Beggining loop in VarClus._one_iteration method.
+2024-07-08 15:38:48,433 - varclus - DEBUG - Entering ClusterMergerSplitter.split_cluster method.
+2024-07-08 15:38:48,433 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:38:48,439 - varclus - DEBUG - Beggining loop in ClusterMergerSplitter.split_cluster method.
+2024-07-08 15:38:48,439 - varclus - DEBUG - Completed ClusterMergerSplitter.split_cluster method.
+2024-07-08 15:38:48,439 - varclus - DEBUG - Entering ClusterMergerSplitter.split_cluster method.
+2024-07-08 15:38:48,439 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:38:48,440 - varclus - DEBUG - Entering ClusterMergerSplitter.split_cluster method.
+2024-07-08 15:38:48,440 - varclus - DEBUG - Entering ClusterMergerSplitter.get_variables method.
+2024-07-08 15:38:48,440 - varclus - DEBUG - Completed loop in VarClus._one_iteration method.
+2024-07-08 15:38:48,440 - varclus - DEBUG - Completed VarClus._one_iteration method.
+2024-07-08 15:38:48,440 - varclus - DEBUG - Completed loop in VarClus.run method. Assigning final clusters.
+2024-07-08 15:38:48,440 - varclus - DEBUG - Entering VarClus.get_clusters method.
+2024-07-08 15:38:48,440 - varclus - DEBUG - Completed VarClus.get_clusters method.
+2024-07-08 15:38:48,440 - varclus - DEBUG - Completed VarClus.run method.
