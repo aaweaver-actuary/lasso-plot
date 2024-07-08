@@ -1,18 +1,41 @@
-"""Plot the LASSO regularization path as a feature selection tool."""
+"""Create a LASSO path plot for the top N features."""
 
 from __future__ import annotations
 
 from typing import Tuple
 
 import numpy as np
-import pandas as pd
 import plotly.graph_objects as go
 import polars as pl
 from predictables import DuckDB
 
 DATABASE_FILE = "./hit_ratio_results.duckdb"
-TOP_N_FEATURES = 50
+TOP_N_FEATURES = 25
+N_ALPHA = 1000
 HTML_OUTPUT_FILE = f"./lasso_plot_top_{TOP_N_FEATURES}.html"
+
+DataFrameLike = pl.DataFrame | pl.LazyFrame
+
+
+def get_most_recent_run(db: DuckDB) -> str:
+    """Return the most recent run_id."""
+    return db("""
+    with
+    
+    -- most recent run timestamp
+    max_run_at as (
+        select max(run_at) as max_run_at from lasso_plot.run_lookup 
+    ),
+    
+    -- run_id corresponding to timestamp
+    lookup as (
+        select distinct rl.run_id
+        from lasso_plot.run_lookup as rl, max_run_at
+        where run_at = max_run_at
+    )
+    
+    from lookup
+    """).item(0, 0)
 
 
 def add_single_path(fig: go.Figure, feature: str, db: DuckDB) -> go.Figure:
@@ -41,36 +64,30 @@ def add_zero_line(
 ) -> go.Figure:
     """Add a horizontal line at y=0 to indicate when the feature has dropped out of the model."""
     fig.add_scatter(
-        x=[0, 100], y=[0, 0], name=name, line={"color": lc, "width": lw, "dash": ls}
+        x=[0, N_ALPHA], y=[0, 0], name=name, line={"color": lc, "width": lw, "dash": ls}
     )
 
     return fig
 
 
-def handle_window_size(
-    results: pl.LazyFrame | pl.DataFrame, db: DuckDB
-) -> Tuple[float, float]:
-    """Adjust the window size to always include the y=0 line."""
-    data_y = (
-        db("""
-        from lasso_plot.result
-        where alpha > 0
-        order by alpha
-    """)
-        .lazy()
-        .select(["alpha", *top_features(results, TOP_N_FEATURES).tolist()])
-        .drop("alpha")
+def handle_window_size(results: DataFrameLike) -> Tuple[float, float]:
+    """Adjust the window size to always include the y=0 line, while ensuring that outliers on the y-axis do not distort the plot."""
+    # Get the first and 99th quantiles of the data, excluding the alpha column and all 0 values
+    arr = (
+        results.select([c for c in results.columns if c not in ["alpha", "run_id"]])
         .collect()
         .to_numpy()
         .flatten()
     )
+    min_y, max_y = np.quantile(arr[arr != 0], [0.01, 0.99])
 
-    return min(np.min(data_y), 0), max(np.max(data_y), 0)
+    # Return the min and max values
+    return min(min_y, 0), max(max_y, 0)
 
 
 def __top_features_l2_strategy(
-    results: pl.LazyFrame | pl.DataFrame, n: int = TOP_N_FEATURES
-) -> pd.Series:
+    results: DataFrameLike, n: int = TOP_N_FEATURES
+) -> pl.DataFrame:
     """Separate the l2 strategy from the logic of which strategy is chosen."""
     return (
         results.select(
@@ -94,8 +111,8 @@ def __top_features_l2_strategy(
 
 
 def __top_features_alpha_rank_strategy(
-    results: pl.LazyFrame | pl.DataFrame, n: int = TOP_N_FEATURES
-) -> pd.Series:
+    results: DataFrameLike, n: int = TOP_N_FEATURES
+) -> pl.DataFrame:
     """Separate the alpha ranking strategy from the logic of which strategy is chosen."""
     return (
         results.sort("alpha")
@@ -121,13 +138,13 @@ def __top_features_alpha_rank_strategy(
 
 
 def top_features(
-    results: pl.LazyFrame | pl.DataFrame, strategy: str = "alpha_rank"
-) -> pd.Series:
+    results: DataFrameLike, n: int = TOP_N_FEATURES, strategy: str = "alpha_rank"
+) -> pl.DataFrame:
     """Sort the features based on their importance to the LASSO regression model."""
     if strategy == "l2_norm":
-        return __top_features_l2_strategy(results)
+        return __top_features_l2_strategy(results, n)
     elif strategy == "alpha_rank":
-        return __top_features_alpha_rank_strategy(results)
+        return __top_features_alpha_rank_strategy(results, n)
     else:
         raise NotImplementedError(
             f"strategy {strategy} has not been implemented for top_features. Use `l2_norm` or `alpha_rank` instead."
@@ -149,11 +166,9 @@ def update_x_axis(fig: go.Figure, db: DuckDB) -> go.Figure:
     return fig
 
 
-def update_y_axis(
-    fig: go.Figure, results: pl.LazyFrame | pl.DataFrame, db: DuckDB
-) -> go.Figure:
+def update_y_axis(fig: go.Figure, results: DataFrameLike) -> go.Figure:
     """Update the y-axis label and range."""
-    min_y, max_y = handle_window_size(results, db)
+    min_y, max_y = handle_window_size(results)
     fig.update_layout(
         yaxis={
             "title": "10-alpha Moving Average Fitted Coefficient",
@@ -166,7 +181,7 @@ def update_y_axis(
 
 def update_title(fig: go.Figure, title: str | None = None) -> go.Figure:
     """Update the y-axis label and range."""
-    title = (
+    title_ = (
         (
             "<b>LASSO Regularization Path - Top 50 Features</b><br>"
             "Impact on fitted coefficients as the L1-regularization penalty is slowly increased<br>"
@@ -176,13 +191,13 @@ def update_title(fig: go.Figure, title: str | None = None) -> go.Figure:
         else title
     )
 
-    fig.update_layout(title=title)
+    fig.update_layout(title={"text": title_})
 
     return fig
 
 
-def build_plot(results: pl.LazyFrame | pl.DataFrame, db: DuckDB) -> None:
-    """Build the plot and save it to an HTML file."""
+def build_plot(results: DataFrameLike, db: DuckDB) -> None:
+    """Build the LASSO path plot for the top N features, and save it to an HTML file."""
     fig = go.Figure()
 
     # Add all the individual paths
@@ -192,19 +207,29 @@ def build_plot(results: pl.LazyFrame | pl.DataFrame, db: DuckDB) -> None:
     # Add some layout elements, update axes, etc
     fig = add_zero_line(fig)
     fig = update_x_axis(fig, db)
-    fig = update_y_axis(fig, results, db)
+    fig = update_y_axis(fig, results)
+    fig = update_title(fig)
 
     # Save the file
     fig.write_html(HTML_OUTPUT_FILE)
 
 
 def main() -> None:
-    """Define the main functionality of the script."""
+    """Build the LASSO path plot.
+
+    1. Initialize the database.
+    2. Get the most recent run_id.
+    3. Get the results data.
+    4. Build the plot.
+    """
     # initialize the database
     db = DuckDB(DATABASE_FILE)
 
+    # most recent run_id
+    max_run_id = get_most_recent_run(db)
+
     # get the results data
-    results = db("from lasso_plot.result").lazy()
+    results = db(f"from lasso_plot.result where run_id='{max_run_id}'").lazy()
 
     # build the plot
     build_plot(results, db)
