@@ -1,35 +1,51 @@
 """Create a Dash app to visualize the results."""
 
-import dash  # type: ignore
-from dash import dcc, html, Input, Output
-import plotly.express as px  # type: ignore
-import pandas as pd
+from __future__ import annotations
+from dash import html, dcc  # type: ignore
+from app.Layout import Layout
+from app.components.SelectedSeriesScatterplot import SelectedSeriesScatterplot
+from app.components.base import h1
+from app._app_config import app, data
 
-# Initialize the Dash app
-app = dash.Dash(__name__)
 
 # Layout of the app
-app.layout = html.Div(
+app.layout = Layout(
     [
-        html.H1("Interactive Dash App"),
-        dcc.Dropdown(
-            id="city-dropdown",
-            options=[{"label": city, "value": city} for city in df["City"].unique()],
-            value="SF",
+        h1("Scatterplot"),
+        dcc.Store(
+            id="selected-features-store",
+            data={"x": data.features[0], "y": data.features[1]},
         ),
-        dcc.Graph(id="bar-chart"),
+        html.Div(
+            [
+                html.Div(
+                    [
+                        SelectedSeriesScatterplot(
+                            xaxis_column_name=None, yaxis_column_name=None
+                        )
+                    ],
+                    id="scatterplot-container",
+                    style={
+                        "border": "1px solid black",
+                        "margin": "5px",
+                        "height": "87%",
+                    },
+                ),
+                html.Div(
+                    [html.Div()],
+                    className="x-axis-container",
+                    style={
+                        "border": "1px solid black",
+                        "margin": "5px",
+                        "height": "10%",
+                    },
+                ),
+            ],
+            className="flex flex-col border-[1px] border-black h-[79vh] m-[10px] w-full",
+        ),
     ]
 )
 
 
-# Callback to update the bar chart based on the selected city
-@app.callback(Output("bar-chart", "figure"), Input("city-dropdown", "value"))
-def update_chart(selected_city):
-    filtered_df = df[df["City"] == selected_city]
-    fig = px.bar(filtered_df, x="Fruit", y="Amount", title=f"Fruits in {selected_city}")
-    return fig
-
-
-# Run the app
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run(debug=True)
