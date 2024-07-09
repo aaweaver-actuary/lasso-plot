@@ -1,0 +1,18 @@
+2024-07-09 11:01:14,259 - test_performance - INFO - Running VarClus with 10 clusters and 4 jobs.
+2024-07-09 11:01:14,259 - test_performance - INFO - VarClus object created in 0.0000 seconds.
+2024-07-09 11:01:29,782 - test_performance - INFO - Clustering completed in 15.5228 seconds.
+2024-07-09 11:01:29,798 - test_performance - INFO - Running VarClus with 10 clusters and 4 jobs.
+2024-07-09 11:01:29,798 - test_performance - INFO - VarClus object created in 0.0000 seconds.
+2024-07-09 11:01:30,900 - test_performance - INFO - Clustering completed in 1.1021 seconds.
+2024-07-09 11:01:30,917 - test_performance - INFO - Running VarClus with 20 clusters and 4 jobs.
+2024-07-09 11:01:30,917 - test_performance - INFO - VarClus object created in 0.0001 seconds.
+2024-07-09 11:01:46,063 - test_performance - INFO - Clustering completed in 15.1458 seconds.
+2024-07-09 11:01:46,066 - test_performance - INFO - Running VarClus with 20 clusters and 4 jobs.
+2024-07-09 11:01:46,067 - test_performance - INFO - VarClus object created in 0.0000 seconds.
+2024-07-09 11:01:46,081 - test_performance - INFO - Clustering completed in 0.0142 seconds.
+2024-07-09 11:01:46,085 - test_performance - INFO - Running VarClus with 30 clusters and 4 jobs.
+2024-07-09 11:01:46,085 - test_performance - INFO - VarClus object created in 0.0000 seconds.
+2024-07-09 11:02:02,346 - test_performance - INFO - Clustering completed in 16.2612 seconds.
+2024-07-09 11:02:02,349 - test_performance - INFO - Running VarClus with 30 clusters and 4 jobs.
+2024-07-09 11:02:02,350 - test_performance - INFO - VarClus object created in 0.0000 seconds.
+2024-07-09 11:02:02,363 - test_performance - INFO - Clustering completed in 0.0133 seconds.

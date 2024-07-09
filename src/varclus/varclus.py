@@ -167,10 +167,13 @@ class PCAHandler:
         The input data with variables as columns.
     n_components : int, optional
         The number of components to keep in PCA. Default is 1.
+    n_jobs : int, optional
+        The number of jobs to run in parallel. Default is -1.
     """
 
     data: pd.DataFrame
     n_components: int = 1
+    n_jobs: int = -1
 
     def get_most_important_component(self, vars: List[str]) -> Tuple[np.ndarray, float]:
         """Get the most important component in a cluster.
@@ -292,7 +295,7 @@ class ClusterMergerSplitter:
             return  # Cannot split a cluster with a single variable
 
         data_subset = self.data[vars]
-        pca = PCA(n_components=2)
+        pca = PCA(n_components=2, n_jobs=self.pca_handler.n_jobs)
         pca.fit(data_subset)
         pca_components = pca.transform(data_subset)
 
@@ -330,15 +333,21 @@ class VarClus:
 
     data: pd.DataFrame
     max_clusters: int | None = None
+    n_clusters: int | None = None
     n_components: int = 1
     threshold: float = 0.7
     clustering_method: str = "average"
     clusters: np.ndarray | None = None
+    n_jobs: int = -1
 
     def __post_init__(self):
         """Initialize the class."""
+        if self.n_clusters is None:
+            self.n_clusters = self.max_clusters or int(
+                self.threshold * len(self.data.columns)
+            )
         self.matrix_calculator = MatrixCalculator(self.data)
-        self.pca_handler = PCAHandler(self.data, self.n_components)
+        self.pca_handler = PCAHandler(self.data, self.n_components, self.n_jobs)
         self.are_clusters_initialized = False
         self.final_clusters_ = None
         logger.debug("Initialized VarClus class.")
@@ -375,7 +384,7 @@ class VarClus:
         initial_clusters = self.clusters.copy()
 
         logger.debug("Beggining loop in VarClus._one_iteration method.")
-        n_relationships = math.comb(np.unique(self.clusters), 2)
+        n_relationships = math.comb(np.unique(self.clusters).shape[0], 2)
         for i, j in tqdm(
             itertools.combinations(np.unique(self.clusters), 2),
             total=n_relationships,
