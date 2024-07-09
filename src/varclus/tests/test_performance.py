@@ -1,8 +1,8 @@
 import pytest
 import pandas as pd
 import numpy as np
-from varclus.varclus import VarClus as Vc1
-from varclus.varclus_v2 import VarClus as Vc2
+from varclus.varclus__OLD import VarClus as Vc1
+from varclus.varclus import VarClus as Vc2
 import logging
 import time
 

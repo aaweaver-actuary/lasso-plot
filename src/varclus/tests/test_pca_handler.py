@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA
-from varclus.varclus import PCAHandler
+from varclus.varclus__OLD import PCAHandler
 
 
 @pytest.fixture

@@ -1,0 +1,38 @@
+2024-07-09 14:09:34,446 - varclus.varclus - ERROR - Input data must be a pandas DataFrame.
+2024-07-09 14:09:34,450 - varclus.varclus - ERROR - Input data contains missing values.
+2024-07-09 14:09:34,452 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:14:04,680 - varclus.varclus - ERROR - Input data must be a pandas DataFrame.
+2024-07-09 14:14:04,688 - varclus.varclus - ERROR - Input data contains missing values.
+2024-07-09 14:14:04,691 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:19:23,351 - varclus.varclus - ERROR - Input data must be a pandas DataFrame.
+2024-07-09 14:19:23,354 - varclus.varclus - ERROR - Input data contains missing values.
+2024-07-09 14:19:23,356 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:22:08,525 - varclus.varclus - ERROR - Input data must be a pandas DataFrame.
+2024-07-09 14:22:08,527 - varclus.varclus - ERROR - Input data contains missing values.
+2024-07-09 14:22:08,529 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:32:55,688 - varclus.varclus - ERROR - Input data must be a pandas DataFrame.
+2024-07-09 14:32:55,690 - varclus.varclus - ERROR - Input data contains missing values.
+2024-07-09 14:32:55,692 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:36:48,212 - varclus.varclus - ERROR - Input data must be a pandas DataFrame.
+2024-07-09 14:36:48,216 - varclus.varclus - ERROR - Input data contains missing values.
+2024-07-09 14:36:48,243 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:36:49,642 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:38:11,104 - varclus.varclus - ERROR - Input data must be a pandas DataFrame.
+2024-07-09 14:38:11,105 - varclus.varclus - ERROR - Input data contains missing values.
+2024-07-09 14:38:11,107 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:38:12,213 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:42:00,436 - varclus.varclus - ERROR - Input data must be a pandas DataFrame.
+2024-07-09 14:42:00,441 - varclus.varclus - ERROR - Input data contains missing values.
+2024-07-09 14:42:00,448 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:42:01,643 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:44:07,048 - varclus.varclus - ERROR - Input data must be a pandas DataFrame.
+2024-07-09 14:44:07,050 - varclus.varclus - ERROR - Input data contains missing values.
+2024-07-09 14:44:07,052 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:44:11,042 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:45:52,598 - varclus.varclus - ERROR - Input data must be a pandas DataFrame.
+2024-07-09 14:45:52,603 - varclus.varclus - ERROR - Input data contains missing values.
+2024-07-09 14:45:52,605 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:45:56,247 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:48:10,515 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:48:37,248 - varclus.varclus - ERROR - Input data must contain at least two variables.
+2024-07-09 14:52:01,810 - varclus.varclus - ERROR - Input data must contain at least two variables.

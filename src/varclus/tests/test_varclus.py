@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import numpy as np
-from varclus.varclus import (
+from varclus.varclus__OLD import (
     VarClus,
     MatrixCalculator,
     ClusterInitializer,

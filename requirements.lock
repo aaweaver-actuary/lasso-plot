@@ -93,9 +93,12 @@ cycler==0.12.1
     # via matplotlib
     # via predictables
 dash==2.17.1
+    # via dash-cytoscape
     # via lasso-plot
 dash-core-components==2.0.0
     # via dash
+dash-cytoscape==1.0.1
+    # via lasso-plot
 dash-html-components==2.0.0
     # via dash
 dash-table==5.0.0
@@ -320,6 +323,8 @@ nest-asyncio==1.6.0
     # via dash
     # via ipykernel
     # via predictables
+networkx==3.3
+    # via lasso-plot
 notebook==7.2.1
     # via jupyter
     # via lasso-plot

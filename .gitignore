@@ -10,3 +10,6 @@ wheels/
 .venv
 
 .duckdb
+
+cache_dir/
+metadata.json

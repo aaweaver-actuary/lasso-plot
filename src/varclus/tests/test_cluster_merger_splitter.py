@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA
-from varclus.varclus import ClusterMergerSplitter, PCAHandler
+from varclus.varclus__OLD import ClusterMergerSplitter, PCAHandler
 
 
 @pytest.fixture

@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 from scipy.cluster.hierarchy import linkage, fcluster
-from varclus.varclus import ClusterInitializer
+from varclus.varclus__OLD import ClusterInitializer
 
 
 @pytest.fixture

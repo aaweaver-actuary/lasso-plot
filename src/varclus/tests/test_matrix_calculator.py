@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import numpy as np
-from varclus.varclus import MatrixCalculator, handle_exceptions, validate_data
+from varclus.varclus__OLD import MatrixCalculator, handle_exceptions, validate_data
 
 
 @pytest.fixture
