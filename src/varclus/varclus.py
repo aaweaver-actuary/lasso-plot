@@ -1,16 +1,20 @@
 """Reproduce the algorithm used by SAS PROC VARCLUS for variable clustering."""
 
 from __future__ import annotations
+
+import itertools
+import logging
+import math
+from dataclasses import dataclass
+from functools import wraps
+from typing import Callable, List, Tuple
+
 import numpy as np
 import pandas as pd
-from sklearn.decomposition import PCA
-from scipy.cluster.hierarchy import linkage, fcluster
+from scipy.cluster.hierarchy import fcluster, linkage
 from scipy.spatial.distance import squareform
-from dataclasses import dataclass
-from typing import List, Tuple, Callable
-import itertools
-from functools import wraps
-import logging
+from sklearn.decomposition import PCA
+from tqdm import tqdm
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -129,7 +133,10 @@ class ClusterInitializer:
         logger.debug(
             "Entering ClusterInitializer.perform_hierarchical_clustering method."
         )
-        return linkage(squareform(self.dist_matrix), method=self.clustering_method)
+        return linkage(
+            pd.Series(squareform(self.dist_matrix, checks=False)).fillna(0).to_numpy(),
+            method=self.clustering_method,
+        )
 
     def get_clusters(self, Z: np.ndarray) -> np.ndarray:
         """Get initial clusters.
@@ -368,14 +375,23 @@ class VarClus:
         initial_clusters = self.clusters.copy()
 
         logger.debug("Beggining loop in VarClus._one_iteration method.")
-        for i, j in itertools.combinations(np.unique(self.clusters), 2):
+        n_relationships = math.comb(np.unique(self.clusters), 2)
+        for i, j in tqdm(
+            itertools.combinations(np.unique(self.clusters), 2),
+            total=n_relationships,
+            desc=f"Checking the {n_relationships} relationships between the clusters for any clusters that can be combined.\n",
+        ):
             if cluster_merger_splitter.should_two_clusters_merge(i, j):
+                print(f"Merging clusters {i} and {j}, with the new label being {i}")
                 self.clusters[self.clusters == j] = i
                 return True
         logger.debug("Completed loop in VarClus._one_iteration method.")
 
         logger.debug("Beggining loop in VarClus._one_iteration method.")
-        for cluster in np.unique(self.clusters):
+        for cluster in tqdm(
+            np.unique(self.clusters),
+            desc=f"Checking all the {np.unique(self.clusters)} clusters for any that can be split in two.\n",
+        ):
             cluster_merger_splitter.split_cluster(cluster)
         logger.debug("Completed loop in VarClus._one_iteration method.")
 
