@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 import numpy as np
 from sklearn.datasets import load_breast_cancer, load_iris
-from varclus.varclus_bootstrap import varclus_bootstrap
+from varclus.src._bootstrap import varclus_bootstrap
 import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots

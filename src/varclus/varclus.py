@@ -6,6 +6,15 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import AgglomerativeClustering
 from joblib import Parallel, delayed, Memory
 import logging
+from varclus.src._bootstrap import varclus_bootstrap
+from varclus.src._clustering import cluster_features
+from varclus.src._force_diagram import plot_force_diagram
+import plotly.graph_objects as go
+from varclus.src.varclus_bootstrap_runner import VarclusBootstrapRunner
+from varclus.src.varclus_clusterer import VarclusClusterer
+from varclus.src.varclus_runner import VarclusRunner
+
+__all__ = ["VarclusBootstrapRunner", "VarclusClusterer", "VarclusRunner"]
 
 # Initialize the logger
 logger = logging.getLogger(__name__)
@@ -26,6 +35,7 @@ stream_handler.setFormatter(formatter)
 # Add handlers to the logger
 logger.addHandler(file_handler)
 logger.addHandler(stream_handler)
+
 # Create a memory object to cache the results of the PCA step
 memory = Memory(location="cache_dir", verbose=0)
 
@@ -83,3 +93,33 @@ class VarClus:
         logger.debug("Running VarClus")
         self.initialize_clusters()
         return self.clusters
+
+    def run_bootstrap(self, n_iterations: int = 100) -> pd.DataFrame:
+        """Run the VarClus bootstrap to estimate pairing probabilities."""
+        logger.debug("Running VarClus bootstrap")
+        prob_matrix = varclus_bootstrap(data=self.data, n_iterations=n_iterations)
+        prob_matrix.to_parquet("pairing_probabilities.parquet")
+
+    def read_probability_matrix(self) -> pd.DataFrame:
+        """Read the pairing probabilities from disk."""
+        try:
+            return pd.read_parquet("pairing_probabilities.parquet")
+        except FileNotFoundError:
+            logger.error("Pairing probabilities not found. Running the bootstrap.")
+            self.run_bootstrap()
+            return pd.read_parquet("pairing_probabilities.parquet")
+
+    def cluster_features(self) -> dict:
+        """Cluster features based on their pairing probabilities."""
+        probability_matrix = self.read_probability_matrix()
+        logger.debug("Clustering features based on pairing probabilities")
+        self.clusters = cluster_features(probability_matrix)
+        return self.clusters
+
+    def plot(self) -> go.Figure:
+        """Plot a force-directed graph of the feature clusters."""
+        if self.clusters is None:
+            logger.error("Feature clusters have not been computed.")
+            raise ValueError("Feature clusters have not been computed.")
+        logger.debug("Plotting force-directed graph")
+        return plot_force_diagram(self.clusters, self.data.columns)

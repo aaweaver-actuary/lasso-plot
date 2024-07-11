@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import numpy as np
-from varclus.varclus_bootstrap import (
+from varclus.src._bootstrap import (
     calculate_pairing_probabilities,
     resampled_data_draw,
     update_pair_counts,

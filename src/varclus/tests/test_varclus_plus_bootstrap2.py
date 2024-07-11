@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 import numpy as np
 from collections import defaultdict
-from varclus.varclus_bootstrap import (
+from varclus.src._bootstrap import (
     calculate_pairing_probabilities,
     resampled_data_draw,
     update_pair_counts,
@@ -34,15 +34,19 @@ def test_calculate_pairing_probabilities():
     ), f"Expected {expected_probabilities}, but got {result}."
 
 
-def test_resampled_data_draw(synthetic_data):
-    """Test resampling data."""
-    resampled_data = resampled_data_draw(synthetic_data)
-    assert (
-        resampled_data.shape == synthetic_data.shape
-    ), f"Expected shape {synthetic_data.shape}, but got {resampled_data.shape}."
-    assert resampled_data.columns.equals(
-        synthetic_data.columns
-    ), f"Expected columns {synthetic_data.columns}, but got {resampled_data.columns}."
+def test_resampled_data_draw():
+    data = pd.DataFrame({"A": range(100)})
+    result = resampled_data_draw(data, initial_sample_fraction=0.5, n_observations=50)
+
+    assert len(result) == 50
+    assert all(result.index < 100)
+    assert result["A"].isin(data["A"]).all()
+
+
+def test_invalid_initial_sample_fraction():
+    data = pd.DataFrame({"A": range(100)})
+    with pytest.raises(ValueError):
+        resampled_data_draw(data, initial_sample_fraction=1.5)
 
 
 def test_update_pair_counts():

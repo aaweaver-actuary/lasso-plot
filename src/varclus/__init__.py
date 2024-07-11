@@ -1,4 +1,3 @@
-from varclus.varclus import VarClus
-from varclus.varclus_bootstrap import varclus_bootstrap
+from varclus.varclus import VarclusBootstrapRunner, VarclusClusterer, VarclusRunner
 
-__all__ = ["VarClus", "varclus_bootstrap"]
+__all__ = ["VarclusBootstrapRunner", "VarclusClusterer", "VarclusRunner"]
