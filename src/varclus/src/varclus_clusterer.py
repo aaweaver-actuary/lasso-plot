@@ -10,7 +10,6 @@ from varclus.interfaces import FeatureClusteringBootstrapRunner
 import networkx as nx
 import plotly.graph_objects as go
 
-
 @dataclass
 class VarclusClusterer:
     """A feature clustering algorithm based on the VarClus algorithm."""

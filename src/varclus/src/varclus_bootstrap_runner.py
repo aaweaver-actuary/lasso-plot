@@ -3,214 +3,198 @@
 from __future__ import annotations
 import numpy as np
 import pandas as pd
-from collections import defaultdict
 from dataclasses import dataclass
+from varclus.interfaces import FeatureClusteringRunner, FeatureClusteringResampler
 from varclus.logger import logger
-from varclus.interfaces import FeatureClusteringRunner
 
 __all__ = ["VarclusBootstrapRunner"]
 
 
 @dataclass
 class VarclusBootstrapRunner:
-    """A runner for the VarClus algorithm that supports bootstrapping."""
+    """Represents the bootstrap resampling process itself.
 
-    runner: FeatureClusteringRunner
+    Algorithm
+    ---------
+    1. Draw a resampled dataset from the input data.
+    2. Run the VarClus algorithm on the resampled dataset.
+    3. Update the pair count with the counts from the VarClus clustering.
+    4. Repeat steps 1-3 for a specified number of iterations.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The input data to be clustered.
+    runner : FeatureClusteringRunner
+        A runner instance that will be used to run the VarClus algorithm.
+    resampler : FeatureClusteringResampler
+        A resampler instance that will be used to draw resampled datasets.
+    bootstrap_sample_fraction : float, default=0.75
+        The fraction of the data to be used for each bootstrap sample.
+    n_observations : int, default=2000
+        The number of observations to be included in each bootstrap sample.
+    n_iterations : int, default=100
+        The number of bootstrap iterations to run.
+
+    Returns
+    -------
+    A dictionary mapping pairs of features to the number of times out of the total iterations
+    that the two features were included in the same cluster.
+    """
+
     data: pd.DataFrame
-    initial_sample_fraction: float = 0.75
+    runner: FeatureClusteringRunner
+    resampler: FeatureClusteringResampler
+    bootstrap_sample_fraction: float = 0.75
     n_observations: int = 2000
     n_iterations: int = 100
-    min_clusters: int = 2
-    max_clusters: int = 20
     total_iterations: int = 0
+    _pair_count: dict[tuple[int, int], int] | None = None
 
     def __post_init__(self):
         """Initialize the VarclusBootstrapRunner."""
-        self.pair_count = defaultdict(int)
-        self.pairing_probabilities = defaultdict(float)
-        self.num_features = len(self.data.columns.tolist())
-
-    def resampled_data_draw(self) -> pd.DataFrame:
-        """Draw a resampled dataset from the input data."""
-        if not 0 < self.initial_sample_fraction <= 1:
+        if not 0 < self.bootstrap_sample_fraction <= 1:
             raise ValueError("Initial sample fraction must be between 0 and 1")
 
-        if self.initial_sample_fraction < 1:
-            data = self.data.sample(
-                frac=self.initial_sample_fraction, replace=False, axis=0
-            )
+    @property
+    def num_features(self) -> int:
+        """Return the number of features in the input data."""
+        return len(self.data.columns)
 
-        return data.sample(n=self.n_observations, replace=True, axis=0)
+    @property
+    def pair_count(self) -> dict[tuple[int, int], int]:
+        """Return the pair count dictionary."""
+        return self._pair_count if self._pair_count is not None else {}
 
-    def calculate_pairing_probabilities(self) -> dict:
-        """Calculate pairing probabilities from the pair count."""
-        logger.debug(
-            f"| `calculate_pairing_probabilities` | len(self.pair_count): {len(self.pair_count)}"
-        )
-        return {
-            pair: count / self.total_iterations
-            for pair, count in self.pair_count.items()
-        }
+    @pair_count.setter
+    def pair_count(self, value: dict[tuple[int, int], int]) -> None:
+        """Set the pair count dictionary."""
+        self._pair_count = value
 
-    def update_pair_count(self, clusters: np.ndarray, pair_count: dict) -> dict:
-        """Update the pair count based on the current clustering."""
-        logger.debug(
-            f"| `update_pair_count` | Current pair count length: {len(pair_count)}"
-        )
-        logger.debug(f"| `update_pair_count` | clusters: {clusters}")
-        num_features = len(clusters)
-        logger.debug(f"| `update_pair_count` | Number of features: {num_features}")
-        for i in range(num_features):
-            for j in range(i, num_features):
-                if (i == j) or (clusters[i] == clusters[j]):
-                    pair_count[(i, j)] += 1
+    def resampled_data_draw(self) -> FeatureClusteringRunner:
+        """Run the resample method on the runner to generate a new runner instance.
 
-        return pair_count
+        Note
+        ----
+        This is Step 1 from the algorithm above.
+        """
+        # logger.debug("Starting VarclusBootstrapRunner.resampled_data_draw")
+        # logger.debug("===================================================\n")
 
-    def single_bootstrap_iteration(self, n_clusters: int, pair_count: dict) -> None:
-        """Run a single bootstrap iteration."""
-        runner = self.runner.resample(
-            self.runner, self.initial_sample_fraction, self.n_observations
+        if not 0 < self.bootstrap_sample_fraction <= 1:
+            raise ValueError("Initial sample fraction must be between 0 and 1")
+
+        return self.resampler.resample(
+            fraction=self.bootstrap_sample_fraction,
+            n_observations=self.n_observations,
+            **self.runner.params,
         )
 
-        logger.debug(
-            f"| `single_bootstrap_iteration` | type(runner)/runner: {type(runner)}/{runner}"
-        )
+    def run_varclus_on_runner(self, runner: FeatureClusteringRunner) -> np.ndarray:
+        """Run the VarClus algorithm on the resampled dataset.
 
-        clusters = runner.run(n_clusters)
+        Note
+        ----
+        This is Step 2 from the algorithm above.
 
-        logger.debug(
-            f"| `single_bootstrap_iteration` | type(clusters)/clusters: {type(clusters)}/{clusters}"
-        )
-        pair_count = self.update_pair_count(clusters, pair_count)
+        Parameters
+        ----------
+        runner : FeatureClusteringRunner
+            A runner instance that has been resampled.
 
-        logger.debug(
-            f"| `single_bootstrap_iteration` | type(pair_count)/len(pair_count): {type(pair_count)}/{len(pair_count)}"
-        )
-        self.total_iterations += 1
-        return pair_count
+        Returns
+        -------
+        An array of cluster assignments.
+        """
+        # logger.debug("Starting VarclusBootstrapRunner.run_varclus_on_runner")
+        # logger.debug("=====================================================\n")
 
-    def bootstrap_procedure_for_one_set_of_settings(self, n_clusters: int) -> dict:
-        """Run the bootstrap procedure for a single set of varclus settings."""
-        temp_pair_count = defaultdict(int)
-        for _ in range(self.n_iterations):
-            temp_pair_count = self.single_bootstrap_iteration(
-                n_clusters, temp_pair_count
-            )
-            if (_ + 1) % 20 == 0:
-                logger.info(f"Bootstrap iteration {_ + 1}/{self.n_iterations}")
-                logger.debug(
-                    f"| `bootstrap_procedure_for_one_set_of_settings` | len(temp_pair_count): {len(temp_pair_count)}"
-                )
+        return runner.run()
 
-        return self.pair_count
+    def update_pair_count(
+        self, pair_count: dict, clusters: np.ndarray
+    ) -> dict[tuple[int, int], int]:
+        """Update the pair_count dictionary by adding relationships from the input cluster assignments.
 
-    def full_bootstrap_procedure(self) -> dict:
-        """Run the full bootstrap procedure."""
-        full_result = defaultdict(int)
-        for n_clusters in range(self.min_clusters, self.max_clusters + 1):
-            logger.info(
-                f"\n\nRunning bootstrap for {n_clusters} clusters:\n=============================================="
-            )
-            full_result[n_clusters] = self.bootstrap_procedure_for_one_set_of_settings(
-                n_clusters
-            )
+        If two indices i < j are included in the same cluster group G:
+            pair_count[(i, j)] += 1
 
-        logger.debug(
-            f"| `full_bootstrap_procedure` | type(full_result): {type(full_result)}"
-        )
-        logger.debug(
-            f"| `full_bootstrap_procedure` | len(full_result): {len(full_result)}"
-        )
-        logger.debug(
-            f"| `full_bootstrap_procedure` | first 5 keys from full_result: {list(full_result.keys())[:5]}"
-        )
-        logger.debug(
-            f"| `full_bootstrap_procedure` | first 5 values from full_result: {list(full_result.values())[:5]}"
-        )
+        For j > i, there is no entry pair_count[(j, i)], because the relationship is symmetric between
+        i and j as well as between j and i.
 
-        # Combine the dicts across all cluster numbers
-        output = defaultdict(float)
-        for count_dict in full_result.values():
-            for pair, count in count_dict.items():
-                if pair in output:
-                    output[pair] += count
+        Note
+        ----
+        This is Step 3 from the algorithm above.
+
+        Parameters
+        ----------
+        pair_count : dict[tuple[int, int], int]
+            A dictionary mapping a pair of integers to the count representing the number of times
+            that pair has been seen inside a single cluster.
+        clusters: np.ndarray
+            An array of cluster labels with one element for each feature being clustered.
+
+        Returns
+        -------
+        dict[tuple[int, int], int]
+            The updated pair_count dictionary.
+        """
+        # logger.debug("Starting VarclusBootstrapRunner.update_pair_count")
+        # logger.debug("=================================================\n")
+
+        # pair_count = self.pair_count.copy()
+        for cluster in np.unique(clusters):
+            logger.debug(f"Cluster: {cluster}")
+            cluster_indices = np.where(clusters == cluster)[0]
+            logger.debug(f"Cluster indices:\n\n{cluster_indices}")
+            for i, j in zip(*np.triu_indices(len(cluster_indices), k=1)):
+                if (cluster_indices[i], cluster_indices[j]) in pair_count:
+                    pair_count[(cluster_indices[i], cluster_indices[j])] += 1
                 else:
-                    output[pair] = count
+                    pair_count[(cluster_indices[i], cluster_indices[j])] = 1
 
-        logger.debug(f"| `full_bootstrap_procedure` | type(output): {type(output)}")
-        logger.debug(f"| `full_bootstrap_procedure` | len(output): {len(output)}")
-        logger.debug(
-            f"| `full_bootstrap_procedure` | first 5 keys from output: {list(output.keys())[:5]}"
-        )
-        logger.debug(
-            f"| `full_bootstrap_procedure` | first 5 values from output: {list(output.values())[:5]}"
-        )
+        return pair_count
 
-        return output
+    def bootstrap_loop(
+        self, pair_count: dict[tuple[int, int], int]
+    ) -> dict[tuple[int, int], int]:
+        """Bootstrap iteration loop.
 
-    def build_probability_matrix(self) -> pd.DataFrame:
-        """Build a DataFrame from the pairing probabilities."""
-        probability_matrix = np.zeros((self.num_features, self.num_features))
+        Updates the pair_count dictionary in place with the results of each iteration.
 
-        # DEBUGGING STATEMENTS
-        logger.debug(
-            f"| `build_probability_matrix` | Number of features: {self.num_features}"
-        )
-        logger.debug(
-            f"| `build_probability_matrix` | Probability matrix shape: {probability_matrix.shape}"
-        )
+        Note
+        ----
+        This is a more efficient version of the algorithm that combines the resampling,
+        clustering, and updating steps into a single method. It is essentiall Step 1-3
+        from the algorithm above.
 
-        # Fill in the probability matrix
-        for (i, j), prob in self.pairing_probabilities.items():
-            probability_matrix[i, j] = prob
-            probability_matrix[j, i] = prob  # since the graph is undirected
+        Parameters
+        ----------
+        pair_count : dict[tuple[int, int], int]
+            A dictionary mapping a pair of integers to the count representing the number of times
+            that pair has been seen inside a single cluster.
 
-            # DEBUGGING STATEMENTS
-            logger.debug(
-                f"| `build_probability_matrix` | Pair ({i}, {j}) has probability {prob:.1%}"
-            )
-            logger.debug(
-                f"| `build_probability_matrix` | Matrix value at ({i}, {j}): {probability_matrix[i, j]:.1%}"
-            )
+        Returns
+        -------
+        dict[tuple[int, int], int]
+            The updated pair_count dictionary.
+        """
+        # logger.debug("Starting VarclusBootstrapRunner.bootstrap_loop")
+        # logger.debug("==============================================\n")
 
-        # Return the probability matrix as a DataFrame
-        return pd.DataFrame(
-            probability_matrix, columns=self.data.columns, index=self.data.columns
-        )
+        for _ in range(self.n_iterations):
+            # Step 1: Draw a resampled dataset
+            runner = self.resampled_data_draw()
 
-    def run_bootstrap(self) -> pd.DataFrame:
-        """Run bootstrap resampling and clustering to estimate variable clustering probabilities."""
-        pair_count = self.full_bootstrap_procedure()
+            # Step 2: Run the VarClus algorithm on the resampled dataset
+            clusters = self.run_varclus_on_runner(runner)
 
-        logger.debug(f"| `run_bootstrap` | type(pair_count): {type(pair_count)}")
-        logger.debug(f"| `run_bootstrap` | len(pair_count): {len(pair_count)}")
+            # Step 3: Update the pair count with the counts from the VarClus clustering
+            # and increment the total number of iterations
+            logger.debug(f"Current pair_count length: {len(pair_count)}")
+            pair_count = self.update_pair_count(pair_count, clusters)
+            self.total_iterations += 1
 
-        # Convert to regular dict
-        pair_count = dict(pair_count)
+        # logger.debug(f"Pair count: {pair_count}")
 
-        logger.debug(
-            f"| `run_bootstrap` | Dimensions of the full result: {len(pair_count)}"
-        )
-        pairing_probabilities = {
-            n_clusters: self.calculate_pairing_probabilities()
-            for n_clusters, counts in pair_count.items()
-        }
-
-        # Combining results across all cluster numbers
-        combined_probabilities = defaultdict(float)
-        for cluster_probabilities in pairing_probabilities.values():
-            for pair, prob in cluster_probabilities.items():
-                combined_probabilities[pair] += prob / (
-                    self.max_clusters - self.min_clusters + 1
-                )
-
-        output = self.build_probability_matrix()
-
-        logger.debug(f"| `run_bootstrap` | type(output): {type(output)}")
-        logger.debug(f"| `run_bootstrap` | output shape: {output.shape}")
-        logger.debug(f"| `run_bootstrap` | output columns: {output.head()}")
-
-        output.to_parquet("pairing_probabilities.parquet")
-
-        return output
+        return pair_count

@@ -5,7 +5,7 @@ import logging
 __all__ = ["logger"]
 
 
-LOG_LEVEL = logging.DEBUG
+LOG_LEVEL = logging.INFO
 LOG_FILE_MODE = "w"
 
 # Initialize the logger
